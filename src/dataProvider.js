@@ -8,18 +8,26 @@ export const dataProvider = {
   },
 
   create: async (resource, params) => {
-    const { title } = params.data;
+    const { title } = params.data; // убираем description и url, если их нет в базе
 
     // Загружаем файл в Supabase Storage
     const file = params.data.url.rawFile;
-    const { data: storageData, error: storageError } = await supabase.storage.from('gallery').upload(`${Date.now()}_${file.name}`, file);
+    const { data: storageData, error: storageError } = await supabase
+      .storage
+      .from('gallery')
+      .upload(`${Date.now()}_${file.name}`, file);
     if (storageError) throw new Error(storageError.message);
 
     // Получаем публичный URL загруженного изображения
-    const { publicURL } = supabase.storage.from('gallery').getPublicUrl(storageData.path);
+    const { publicURL } = supabase
+      .storage
+      .from('gallery')
+      .getPublicUrl(storageData.path);
 
     // Сохраняем запись в таблицу photos
-    const { data, error } = await supabase.from('photos').insert([{ title, url: publicURL }]);
+    const { data, error } = await supabase
+      .from('photos')
+      .insert([{ title, url: publicURL }]);
     if (error) throw new Error(error.message);
 
     return { data: data[0] };
@@ -31,3 +39,4 @@ export const dataProvider = {
     return { data: data[0] };
   }
 };
+

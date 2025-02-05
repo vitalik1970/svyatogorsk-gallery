@@ -6,9 +6,8 @@ const PhotoCreate = props => (
   <Create {...props}>
     <SimpleForm>
       <TextInput source="title" label="Название" />
-      <TextInput source="description" label="Описание" />
       <FileInput source="url" label="Фото" accept="image/*">
-        <ImageField source="src" title="title" />
+          <ImageField source="url" title="title" />
       </FileInput>
     </SimpleForm>
   </Create>
