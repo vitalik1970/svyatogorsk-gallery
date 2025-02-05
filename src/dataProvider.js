@@ -8,7 +8,7 @@ export const dataProvider = {
   },
 
   create: async (resource, params) => {
-    const { title, description, url } = params.data;
+    const { title } = params.data;
 
     // Загружаем файл в Supabase Storage
     const file = params.data.url.rawFile;
@@ -19,7 +19,7 @@ export const dataProvider = {
     const { publicURL } = supabase.storage.from('gallery').getPublicUrl(storageData.path);
 
     // Сохраняем запись в таблицу photos
-    const { data, error } = await supabase.from('photos').insert([{ title, description, url: publicURL }]);
+    const { data, error } = await supabase.from('photos').insert([{ title, url: publicURL }]);
     if (error) throw new Error(error.message);
 
     return { data: data[0] };
